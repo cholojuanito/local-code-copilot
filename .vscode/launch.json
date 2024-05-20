@@ -1,0 +1,24 @@
+{
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Run Extension",
+            "type": "extensionHost",
+            "request": "launch",
+            "args": [
+                "--extensionDevelopmentPath=${workspaceFolder}/llm-code-pilot"
+            ],
+            "outFiles": [
+                "${workspaceFolder}/llm-code-pilot/dist/**/*.js"
+            ],
+            "preLaunchTask": "${defaultBuildTask}"
+        },
+        {
+            "name": "Python Debug: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal"
+        }
+    ]
+}
