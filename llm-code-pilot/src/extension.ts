@@ -19,11 +19,11 @@ export function activate(context: vscode.ExtensionContext) {
             const editor = vscode.window.activeTextEditor;
             const selection = editor?.selection;
             const manuallyTriggered = completion_context.triggerKind == vscode.InlineCompletionTriggerKind.Invoke;
-            console.log(manuallyTriggered)
 
+            if (!manuallyTriggered) return [];
 
             // If highlighted from right to left, put cursor at end and retrigger
-            if (manuallyTriggered && selection && position.isEqual(selection.start)) {
+            if (selection && position.isEqual(selection.start)) {
                 console.log('Changing highlight direction')
                 editor!.selection = new vscode.Selection(selection.start, selection.end);
                 vscode.commands.executeCommand('editor.action.inlineSuggest.trigger');
@@ -31,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
             }
 
             // Grab any highlighted text and send to LLM for suggestions
-            if (manuallyTriggered && selection && !selection.isEmpty) {
+            if (selection && !selection.isEmpty) {
                 const selectionRange = new Range(selection.start, selection.end);
 
                 const highlighted = editor.document.getText(selectionRange);
@@ -53,7 +53,7 @@ export function activate(context: vscode.ExtensionContext) {
                     }
                 );
                 var responseText = await response.text();
-                responseText = responseText.replace(/\\r\\n/g, '\n').replace(/\\n/g, '\n')
+                responseText = responseText.replace(/\\r\\n/g, '\n')
 
                 var range = new Range(selection.end, selection.end);
 
